@@ -3,13 +3,16 @@
 header('Content-Type: application/json');
 date_default_timezone_set('Asia/Jakarta');
 
-$host = 'localhost';
-$user = 'tanaya'; 
-$pass = 'Sulanjana11@!';    
-$db   = 'antrean';  
+$host = getenv('DB_HOST');
+$user = getenv('DB_USER'); 
+$pass = getenv('DB_PASS');    
+$db   = getenv('DB_NAME'); 
+$port = getenv('DB_PORT');
 $charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+// Masukkan variabel port ke dalam string DSN menggunakan port=$port
+$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
+
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -19,8 +22,8 @@ $options = [
 try {
      $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-     // Jangan menampilkan pesan $e->getMessage() di production karena bisa membocorkan info server
      header('Content-Type: application/json');
+     // Tips: Jika masih error saat setup awal, Anda bisa ubah teks di bawah menjadi $e->getMessage() untuk melacak masalahnya
      echo json_encode(['status' => 'error', 'message' => 'Koneksi database bermasalah.']);
      exit;
 }
