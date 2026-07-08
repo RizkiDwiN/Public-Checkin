@@ -1,0 +1,11 @@
+# Menggunakan image PHP resmi yang sudah dilengkapi Apache web server
+FROM php:8.2-apache
+
+# Menginstall ekstensi mysqli agar PHP bisa terhubung ke MySQL
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+
+# Menyalin seluruh file PHP Anda ke dalam folder web server Apache
+COPY . /var/www/html/
+
+# Membuka port standar untuk web server
+EXPOSE 80
